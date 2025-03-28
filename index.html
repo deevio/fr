@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>French Words with Pronunciation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        min-height: 100vh;
+        background-color: #f9f9f9;
+      }
+
+      #word-table td,
+      #word-link a {
+        text-decoration: none;
+      }
+
+      .container {
+        display: flex;
+        width: 100%;
+      }
+
+      .table-container {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        max-height: 100vh;
+      }
+
+      .widget-container {
+        flex: 1;
+        padding: 20px;
+        border-left: 1px solid #ddd;
+        background-color: #fff;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f4f4f4;
+      }
+
+      td.clickable-word {
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      td.clickable-word:hover {
+        color: darkblue;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .widget-container {
+          border-left: none;
+          border-top: 1px solid #ddd;
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Table Container -->
+      <div class="table-container">
+        <h2>1000 Most Common French Words</h2>
+        <table id="word-table">
+          <thead>
+            <tr>
+              <th>Number</th>
+              <th>French</th>
+              <th>In English</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Rows will be dynamically generated -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Widget Container - Modified -->
+      <div class="widget-container">
+        <h2>Pronunciation</h2>
+        <!-- Add link container -->
+        <div id="word-link" class="mb-4" style="margin-bottom: 15px">
+          <a
+            href=""
+            target="_blank"
+            style="color: #2563eb; text-decoration: underline; display: none"
+          ></a>
+        </div>
+        <div id="youglish-widget" class="ygContainer"></div>
+      </div>
+    </div>
+
+    <!-- Updated YouGlish initialization -->
+    <script src="https://youglish.com/public/emb/widget.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Data: French words and their English translations
+        const words = [
+          { french: "comme", english: "as" },
+          { french: "je", english: "I" },
+          { french: "son", english: "his" },
+          { french: "que", english: "that" },
+          { french: "il", english: "he" },
+          { french: "était", english: "was" },
+          { french: "pour", english: "for" },
+          { french: "sur", english: "on" },
+          { french: "sont", english: "are" },
+          { french: "avec", english: "with" },
+          { french: "ils", english: "they" },
+          { french: "être", english: "be" },
+          { french: "à", english: "at" },
+          { french: "un", english: "one" },
+          { french: "avoir", english: "have" },
+          { french: "ce", english: "this" },
+          { french: "à partir de", english: "from" },
+          { french: "par", english: "by" },
+          { french: "chaud", english: "hot" },
+          { french: "mot", english: "word" },
+          { french: "mais", english: "but" },
+          { french: "que", english: "what" },
+          { french: "certains", english: "some" },
+          { french: "est", english: "is" },
+          { french: "il", english: "it" },
+          { french: "vous", english: "you" },
+          { french: "ou", english: "or" },
+          { french: "eu", english: "had" },
+          { french: "la", english: "the" },
+          { french: "de", english: "of" },
+          { french: "à", english: "to" },
+          { french: "et", english: "and" },
+          { french: "un", english: "a" },
+          { french: "dans", english: "in" },
+          { french: "nous", english: "we" },
+          { french: "boîte", english: "can" },
+          { french: "dehors", english: "out" },
+          { french: "autre", english: "other" },
+          { french: "étaient", english: "were" },
+          { french: "qui", english: "which" },
+          { french: "faire", english: "do" },
+          { french: "leur", english: "their" },
+          { french: "temps", english: "time" },
+          { french: "si", english: "if" },
+          { french: "volonté", english: "will" },
+          { french: "comment", english: "how" },
+          { french: "dit", english: "said" },
+          { french: "un", english: "an" },
+          { french: "chaque", english: "each" },
+          { french: "dire", english: "tell" },
+          { french: "ne", english: "does" },
+          { french: "ensemble", english: "set" },
+          { french: "trois", english: "three" },
+          { french: "vouloir", english: "want" },
+          { french: "air", english: "air" },
+          { french: "bien", english: "well" },
+          { french: "aussi", english: "also" },
+          { french: "jouer", english: "play" },
+          { french: "petit", english: "small" },
+          { french: "fin", english: "end" },
+          { french: "mettre", english: "put" },
+          { french: "maison", english: "home" },
+          { french: "lire", english: "read" },
+          { french: "main", english: "hand" },
+          { french: "port", english: "port" },
+          { french: "grand", english: "large" },
+          { french: "épeler", english: "spell" },
+          { french: "ajouter", english: "add" },
+          { french: "même", english: "even" },
+          { french: "terre", english: "land" },
+          { french: "ici", english: "here" },
+          { french: "il faut", english: "must" },
+          { french: "grand", english: "big" },
+          { french: "haut", english: "high" },
+          { french: "tel", english: "such" },
+          { french: "suivre", english: "follow" },
+          { french: "acte", english: "act" },
+          { french: "pourquoi", english: "why" },
+          { french: "interroger", english: "ask" },
+          { french: "hommes", english: "men" },
+          { french: "changement", english: "change" },
+          { french: "est allé", english: "went" },
+          { french: "lumière", english: "light" },
+          { french: "genre", english: "kind" },
+          { french: "de", english: "off" },
+          { french: "besoin", english: "need" },
+          { french: "maison", english: "house" },
+          { french: "image", english: "picture" },
+          { french: "essayer", english: "try" },
+          { french: "nous", english: "us" },
+          { french: "encore", english: "again" },
+          { french: "animal", english: "animal" },
+          { french: "point", english: "point" },
+          { french: "mère", english: "mother" },
+          { french: "monde", english: "world" },
+          { french: "près de", english: "near" },
+          { french: "construire", english: "build" },
+          { french: "soi", english: "self" },
+          { french: "terre", english: "earth" },
+          { french: "père", english: "father" },
+          { french: "tout", english: "any" },
+          { french: "nouveau", english: "new" },
+          { french: "travail", english: "work" },
+          { french: "partie", english: "part" },
+          { french: "prendre", english: "take" },
+          { french: "obtenir", english: "get" },
+          { french: "lieu", english: "place" },
+          { french: "fabriqué", english: "made" },
+          { french: "vivre", english: "live" },
+          { french: "où", english: "where" },
+          { french: "après", english: "after" },
+          { french: "arrière", english: "back" },
+          { french: "peu", english: "little" },
+          { french: "seulement", english: "only" },
+          { french: "tour", english: "round" },
+          { french: "homme", english: "man" },
+          { french: "année", english: "year" },
+          { french: "est venu", english: "came" },
+          { french: "montrer", english: "show" },
+          { french: "tous", english: "every" },
+          { french: "bon", english: "good" },
+          { french: "moi", english: "me" },
+          { french: "donner", english: "give" },
+          { french: "notre", english: "our" },
+          { french: "sous", english: "under" },
+          { french: "nom", english: "name" },
+          { french: "très", english: "very" },
+          { french: "par", english: "through" },
+          { french: "juste", english: "just" },
+          { french: "forme", english: "form" },
+          { french: "phrase", english: "sentence" },
+          { french: "grand", english: "great" },
+          { french: "penser", english: "think" },
+          { french: "dire", english: "say" },
+          { french: "aider", english: "help" },
+          { french: "faible", english: "low" },
+          { french: "ligne", english: "line" },
+          { french: "différer", english: "differ" },
+          { french: "tour", english: "turn" },
+          { french: "la cause", english: "cause" },
+          { french: "beaucoup", english: "much" },
+          { french: "signifier", english: "mean" },
+          { french: "avant", english: "before" },
+          { french: "déménagement", english: "move" },
+          { french: "droit", english: "right" },
+          { french: "garçon", english: "boy" },
+          { french: "vieux", english: "old" },
+          { french: "trop", english: "too" },
+          { french: "même", english: "same" },
+          { french: "elle", english: "she" },
+          { french: "tous", english: "all" },
+          { french: "là", english: "there" },
+          { french: "quand", english: "when" },
+          { french: "jusqu’à", english: "up" },
+          { french: "utiliser", english: "use" },
+          { french: "votre", english: "your" },
+          { french: "manière", english: "way" },
+          { french: "sur", english: "about" },
+          { french: "beaucoup", english: "many" },
+          { french: "puis", english: "then" },
+          { french: "les", english: "them" },
+          { french: "écrire", english: "write" },
+          { french: "voudrais", english: "would" },
+          { french: "comme", english: "like" },
+          { french: "si", english: "so" },
+          { french: "ces", english: "these" },
+          { french: "son", english: "her" },
+          { french: "long", english: "long" },
+          { french: "faire", english: "make" },
+          { french: "chose", english: "thing" },
+          { french: "voir", english: "see" },
+          { french: "lui", english: "him" },
+          { french: "deux", english: "two" },
+          { french: "a", english: "has" },
+          { french: "regarder", english: "look" },
+          { french: "plus", english: "more" },
+          { french: "jour", english: "day" },
+          { french: "pourrait", english: "could" },
+          { french: "aller", english: "go" },
+          { french: "venir", english: "come" },
+          { french: "fait", english: "did" },
+          { french: "nombre", english: "number" },
+          { french: "son", english: "sound" },
+          { french: "aucun", english: "no" },
+          { french: "plus", english: "most" },
+          { french: "personnes", english: "people" },
+          { french: "ma", english: "my" },
+          { french: "sur", english: "over" },
+          { french: "savoir", english: "know" },
+          { french: "eau", english: "water" },
+          { french: "que", english: "than" },
+          { french: "appel", english: "call" },
+          { french: "première", english: "first" },
+          { french: "qui", english: "who" },
+          { french: "peut", english: "may" },
+          { french: "vers le bas", english: "down" },
+          { french: "côté", english: "side" },
+          { french: "été", english: "been" },
+          { french: "maintenant", english: "now" },
+          { french: "trouver", english: "find" },
+          { french: "tête", english: "head" },
+          { french: "supporter", english: "stand" },
+          { french: "propre", english: "own" },
+          { french: "page", english: "page" },
+          { french: "devrait", english: "should" },
+          { french: "pays", english: "country" },
+          { french: "trouvé", english: "found" },
+          { french: "réponse", english: "answer" },
+          { french: "école", english: "school" },
+          { french: "croître", english: "grow" },
+          { french: "étude", english: "study" },
+          { french: "encore", english: "still" },
+          { french: "apprendre", english: "learn" },
+          { french: "usine", english: "plant" },
+          { french: "couvercle", english: "cover" },
+          { french: "nourriture", english: "food" },
+          { french: "soleil", english: "sun" },
+          { french: "quatre", english: "four" },
+          { french: "entre", english: "between" },
+          { french: "état", english: "state" },
+          { french: "garder", english: "keep" },
+          { french: "œil", english: "eye" },
+          { french: "jamais", english: "never" },
+          { french: "dernier", english: "last" },
+          { french: "laisser", english: "let" },
+          { french: "pensée", english: "thought" },
+          { french: "ville", english: "city" },
+          { french: "arbre", english: "tree" },
+          { french: "traverser", english: "cross" },
+          { french: "ferme", english: "farm" },
+          { french: "dur", english: "hard" },
+          { french: "début", english: "start" },
+          { french: "puissance", english: "might" },
+          { french: "histoire", english: "story" },
+          { french: "scie", english: "saw" },
+          { french: "loin", english: "far" },
+          { french: "mer", english: "sea" },
+          { french: "tirer", english: "draw" },
+          { french: "gauche", english: "left" },
+          { french: "tard", english: "late" },
+          { french: "courir", english: "run" },
+          { french: "needs a context", english: "don’t" },
+          { french: "tandis que", english: "while" },
+          { french: "presse", english: "press" },
+          { french: "proche", english: "close" },
+          { french: "nuit", english: "night" },
+          { french: "réel", english: "real" },
+          { french: "vie", english: "life" },
+          { french: "peu", english: "few" },
+          { french: "nord", english: "north" },
+          { french: "livre", english: "book" },
+          { french: "porter", english: "carry" },
+          { french: "a pris", english: "took" },
+          { french: "science", english: "science" },
+          { french: "manger", english: "eat" },
+          { french: "chambre", english: "room" },
+          { french: "ami", english: "friend" },
+          { french: "a commencé", english: "began" },
+          { french: "idée", english: "idea" },
+          { french: "poisson", english: "fish" },
+          { french: "montagne", english: "mountain" },
+          { french: "Arrêtez", english: "stop" },
+          { french: "une fois", english: "once" },
+          { french: "base", english: "base" },
+          { french: "entendre", english: "hear" },
+          { french: "cheval", english: "horse" },
+          { french: "coupe", english: "cut" },
+          { french: "sûr", english: "sure" },
+          { french: "regarder", english: "watch" },
+          { french: "couleur", english: "color" },
+          { french: "face", english: "face" },
+          { french: "bois", english: "wood" },
+          { french: "principal", english: "main" },
+          { french: "ouvert", english: "open" },
+          { french: "paraître", english: "seem" },
+          { french: "ensemble", english: "together" },
+          { french: "suivant", english: "next" },
+          { french: "blanc", english: "white" },
+          { french: "enfants", english: "children" },
+          { french: "commencer", english: "begin" },
+          { french: "eu", english: "got" },
+          { french: "marcher", english: "walk" },
+          { french: "exemple", english: "example" },
+          { french: "facilité", english: "ease" },
+          { french: "papier", english: "paper" },
+          { french: "groupe", english: "group" },
+          { french: "toujours", english: "always" },
+          { french: "musique", english: "music" },
+          { french: "ceux", english: "those" },
+          { french: "tous les deux", english: "both" },
+          { french: "marque", english: "mark" },
+          { french: "souvent", english: "often" },
+          { french: "lettre", english: "letter" },
+          { french: "jusqu’à ce que", english: "until" },
+          { french: "mile", english: "mile" },
+          { french: "rivière", english: "river" },
+          { french: "voiture", english: "car" },
+          { french: "pieds", english: "feet" },
+          { french: "soins", english: "care" },
+          { french: "deuxième", english: "second" },
+          { french: "assez", english: "enough" },
+          { french: "plaine", english: "plain" },
+          { french: "fille", english: "girl" },
+          { french: "habituel", english: "usual" },
+          { french: "jeune", english: "young" },
+          { french: "prêt", english: "ready" },
+          { french: "au-dessus", english: "above" },
+          { french: "jamais", english: "ever" },
+          { french: "rouge", english: "red" },
+          { french: "liste", english: "list" },
+          { french: "bien que", english: "though" },
+          { french: "sentir", english: "feel" },
+          { french: "parler", english: "talk" },
+          { french: "oiseau", english: "bird" },
+          { french: "bientôt", english: "soon" },
+          { french: "corps", english: "body" },
+          { french: "chien", english: "dog" },
+          { french: "famille", english: "family" },
+          { french: "direct", english: "direct" },
+          { french: "pose", english: "pose" },
+          { french: "laisser", english: "leave" },
+          { french: "chanson", english: "song" },
+          { french: "mesurer", english: "measure" },
+          { french: "porte", english: "door" },
+          { french: "produit", english: "product" },
+          { french: "noir", english: "black" },
+          { french: "court", english: "short" },
+          { french: "chiffre", english: "numeral" },
+          { french: "classe", english: "class" },
+          { french: "vent", english: "wind" },
+          { french: "question", english: "question" },
+          { french: "arriver", english: "happen" },
+          { french: "complète", english: "complete" },
+          { french: "navire", english: "ship" },
+          { french: "zone", english: "area" },
+          { french: "moitié", english: "half" },
+          { french: "rock", english: "rock" },
+          { french: "ordre", english: "order" },
+          { french: "feu", english: "fire" },
+          { french: "sud", english: "south" },
+          { french: "problème", english: "problem" },
+          { french: "pièce", english: "piece" },
+          { french: "dit", english: "told" },
+          { french: "savait", english: "knew" },
+          { french: "passer", english: "pass" },
+          { french: "depuis", english: "since" },
+          { french: "haut", english: "top" },
+          { french: "ensemble", english: "whole" },
+          { french: "roi", english: "king" },
+          { french: "rue", english: "street" },
+          { french: "pouce", english: "inch" },
+          { french: "multiplier", english: "multiply" },
+          { french: "rien", english: "nothing" },
+          { french: "cours", english: "course" },
+          { french: "rester", english: "stay" },
+          { french: "roue", english: "wheel" },
+          { french: "plein", english: "full" },
+          { french: "force", english: "force" },
+          { french: "bleu", english: "blue" },
+          { french: "objet", english: "object" },
+          { french: "décider", english: "decide" },
+          { french: "surface", english: "surface" },
+          { french: "profond", english: "deep" },
+          { french: "lune", english: "moon" },
+          { french: "île", english: "island" },
+          { french: "pied", english: "foot" },
+          { french: "système", english: "system" },
+          { french: "occupé", english: "busy" },
+          { french: "test", english: "test" },
+          { french: "record", english: "record" },
+          { french: "bateau", english: "boat" },
+          { french: "commun", english: "common" },
+          { french: "or", english: "gold" },
+          { french: "possible", english: "possible" },
+          { french: "plan", english: "plane" },
+          { french: "place", english: "stead" },
+          { french: "sec", english: "dry" },
+          { french: "se demander", english: "wonder" },
+          { french: "rire", english: "laugh" },
+          { french: "mille", english: "thousand" },
+          { french: "il ya", english: "ago" },
+          { french: "ran", english: "ran" },
+          { french: "vérifier", english: "check" },
+          { french: "jeu", english: "game" },
+          { french: "forme", english: "shape" },
+          { french: "assimiler", english: "equate" },
+          { french: "chaud", english: "hot" },
+          { french: "manquer", english: "miss" },
+          { french: "apporté", english: "brought" },
+          { french: "chaleur", english: "heat" },
+          { french: "neige", english: "snow" },
+          { french: "pneu", english: "tire" },
+          { french: "apporter", english: "bring" },
+          { french: "oui", english: "yes" },
+          { french: "lointain", english: "distant" },
+          { french: "remplir", english: "fill" },
+          { french: "est", english: "east" },
+          { french: "peindre", english: "paint" },
+          { french: "langue", english: "language" },
+          { french: "entre", english: "among" },
+          { french: "unité", english: "unit" },
+          { french: "puissance", english: "power" },
+          { french: "ville", english: "town" },
+          { french: "fin", english: "fine" },
+          { french: "certain", english: "certain" },
+          { french: "voler", english: "fly" },
+          { french: "tomber", english: "fall" },
+          { french: "conduire", english: "lead" },
+          { french: "cri", english: "cry" },
+          { french: "sombre", english: "dark" },
+          { french: "machine", english: "machine" },
+          { french: "Note", english: "note" },
+          { french: "patienter", english: "wait" },
+          { french: "plan", english: "plan" },
+          { french: "figure", english: "figure" },
+          { french: "étoile", english: "star" },
+          { french: "boîte", english: "box" },
+          { french: "nom", english: "noun" },
+          { french: "domaine", english: "field" },
+          { french: "reste", english: "rest" },
+          { french: "correct", english: "correct" },
+          { french: "capable", english: "able" },
+          { french: "livre", english: "pound" },
+          { french: "Terminé", english: "done" },
+          { french: "beauté", english: "beauty" },
+          { french: "entraînement", english: "drive" },
+          { french: "résisté", english: "stood" },
+          { french: "contenir", english: "contain" },
+          { french: "avant", english: "front" },
+          { french: "enseigner", english: "teach" },
+          { french: "semaine", english: "week" },
+          { french: "finale", english: "final" },
+          { french: "donné", english: "gave" },
+          { french: "vert", english: "green" },
+          { french: "oh", english: "oh" },
+          { french: "rapide", english: "quick" },
+          { french: "développer", english: "develop" },
+          { french: "océan", english: "ocean" },
+          { french: "chaud", english: "warm" },
+          { french: "gratuit", english: "free" },
+          { french: "minute", english: "minute" },
+          { french: "fort", english: "strong" },
+          { french: "spécial", english: "special" },
+          { french: "esprit", english: "mind" },
+          { french: "derrière", english: "behind" },
+          { french: "clair", english: "clear" },
+          { french: "queue", english: "tail" },
+          { french: "produire", english: "produce" },
+          { french: "fait", english: "fact" },
+          { french: "espace", english: "space" },
+          { french: "entendu", english: "heard" },
+          { french: "meilleur", english: "best" },
+          { french: "heure", english: "hour" },
+          { french: "mieux", english: "better" },
+          { french: "vrai", english: "true" },
+          { french: "pendant", english: "during" },
+          { french: "cent", english: "hundred" },
+          { french: "cinq", english: "five" },
+          { french: "rappeler", english: "remember" },
+          { french: "étape", english: "step" },
+          { french: "tôt", english: "early" },
+          { french: "tenir", english: "hold" },
+          { french: "ouest", english: "west" },
+          { french: "sol", english: "ground" },
+          { french: "intérêt", english: "interest" },
+          { french: "atteindre", english: "reach" },
+          { french: "rapide", english: "fast" },
+          { french: "verbe", english: "verb" },
+          { french: "chanter", english: "sing" },
+          { french: "écouter", english: "listen" },
+          { french: "six", english: "six" },
+          { french: "table", english: "table" },
+          { french: "Voyage", english: "travel" },
+          { french: "moins", english: "less" },
+          { french: "matin", english: "morning" },
+          { french: "dix", english: "ten" },
+          { french: "simple", english: "simple" },
+          { french: "plusieurs", english: "several" },
+          { french: "voyelle", english: "vowel" },
+          { french: "vers", english: "toward" },
+          { french: "guerre", english: "war" },
+          { french: "poser", english: "lay" },
+          { french: "contre", english: "against" },
+          { french: "modèle", english: "pattern" },
+          { french: "lent", english: "slow" },
+          { french: "centre", english: "center" },
+          { french: "amour", english: "love" },
+          { french: "personne", english: "person" },
+          { french: "argent", english: "money" },
+          { french: "servir", english: "serve" },
+          { french: "apparaître", english: "appear" },
+          { french: "route", english: "road" },
+          { french: "carte", english: "map" },
+          { french: "pluie", english: "rain" },
+          { french: "règle", english: "rule" },
+          { french: "gouverner", english: "govern" },
+          { french: "tirer", english: "pull" },
+          { french: "froid", english: "cold" },
+          { french: "avis", english: "notice" },
+          { french: "voix", english: "voice" },
+          { french: "énergie", english: "energy" },
+          { french: "chasse", english: "hunt" },
+          { french: "probable", english: "probable" },
+          { french: "lit", english: "bed" },
+          { french: "frère", english: "brother" },
+          { french: "œuf", english: "egg" },
+          { french: "tour", english: "ride" },
+          { french: "cellule", english: "cell" },
+          { french: "croire", english: "believe" },
+          { french: "peut-être", english: "perhaps" },
+          { french: "choisir", english: "pick" },
+          { french: "soudain", english: "sudden" },
+          { french: "compter", english: "count" },
+          { french: "carré", english: "square" },
+          { french: "raison", english: "reason" },
+          { french: "longueur", english: "length" },
+          { french: "représenter", english: "represent" },
+          { french: "art", english: "art" },
+          { french: "sujet", english: "subject" },
+          { french: "région", english: "region" },
+          { french: "taille", english: "size" },
+          { french: "varier", english: "vary" },
+          { french: "régler", english: "settle" },
+          { french: "parler", english: "speak" },
+          { french: "poids", english: "weight" },
+          { french: "général", english: "general" },
+          { french: "glace", english: "ice" },
+          { french: "question", english: "matter" },
+          { french: "cercle", english: "circle" },
+          { french: "paire", english: "pair" },
+          { french: "inclure", english: "include" },
+          { french: "fracture", english: "divide" },
+          { french: "syllabe", english: "syllable" },
+          { french: "feutre", english: "felt" },
+          { french: "grandiose", english: "grand" },
+          { french: "balle", english: "ball" },
+          { french: "encore", english: "yet" },
+          { french: "vague", english: "wave" },
+          { french: "tomber", english: "drop" },
+          { french: "cœur", english: "heart" },
+          { french: "h", english: "am" },
+          { french: "présent", english: "present" },
+          { french: "lourd", english: "heavy" },
+          { french: "danse", english: "dance" },
+          { french: "moteur", english: "engine" },
+          { french: "position", english: "position" },
+          { french: "bras", english: "arm" },
+          { french: "large", english: "wide" },
+          { french: "voile", english: "sail" },
+          { french: "matériel", english: "material" },
+          { french: "fraction", english: "fraction" },
+          { french: "forêt", english: "forest" },
+          { french: "s’asseoir", english: "sit" },
+          { french: "course", english: "race" },
+          { french: "fenêtre", english: "window" },
+          { french: "magasin", english: "store" },
+          { french: "été", english: "summer" },
+          { french: "train", english: "train" },
+          { french: "sommeil", english: "sleep" },
+          { french: "prouver", english: "prove" },
+          { french: "seul", english: "lone" },
+          { french: "jambe", english: "leg" },
+          { french: "exercice", english: "exercise" },
+          { french: "mur", english: "wall" },
+          { french: "capture", english: "catch" },
+          { french: "monture", english: "mount" },
+          { french: "souhaiter", english: "wish" },
+          { french: "ciel", english: "sky" },
+          { french: "conseil", english: "board" },
+          { french: "joie", english: "joy" },
+          { french: "hiver", english: "winter" },
+          { french: "sat", english: "sat" },
+          { french: "écrit", english: "written" },
+          { french: "sauvage", english: "wild" },
+          { french: "instrument", english: "instrument" },
+          { french: "conservé", english: "kept" },
+          { french: "verre", english: "glass" },
+          { french: "herbe", english: "grass" },
+          { french: "vache", english: "cow" },
+          { french: "emploi", english: "job" },
+        ];
+        // Populate the table with data
+        const tableBody = document.querySelector("#word-table tbody");
+        words.forEach((word, index) => {
+          const row = document.createElement("tr");
+
+          const numberCell = document.createElement("td");
+          numberCell.textContent = index + 1;
+          row.appendChild(numberCell);
+
+          const frenchCell = document.createElement("td");
+          frenchCell.classList.add("clickable-word");
+          frenchCell.textContent = word.french;
+          frenchCell.addEventListener("click", () =>
+            loadYouGlishWidget(word.french)
+          );
+          row.appendChild(frenchCell);
+
+          const englishCell = document.createElement("td");
+          englishCell.textContent = word.english;
+          row.appendChild(englishCell);
+
+          tableBody.appendChild(row);
+        });
+
+        // Initialize the YouGlish widget
+        let youglishWidget = null;
+
+        function loadYouGlishWidget(word) {
+          const widgetContainer = document.getElementById("youglish-widget");
+          const wordLink = document.querySelector("#word-link a");
+
+          // Add click counter to localStorage
+          let clickCount = parseInt(
+            localStorage.getItem("youglishClicks") || 0
+          );
+          clickCount++;
+
+          // Check if we need to clear cookies (after 14 clicks to be safe)
+          if (clickCount >= 10) {
+            clearYouGlishCookies();
+            clickCount = 0;
+          }
+
+          localStorage.setItem("youglishClicks", clickCount);
+
+          // clearYouGlishCookies();
+
+          // Rest of your existing widget code...
+          const youglishUrl = `https://youglish.com/pronounce/${word}/french/fr`;
+          wordLink.href = youglishUrl;
+          wordLink.textContent = youglishUrl;
+          wordLink.style.display = "block";
+
+          widgetContainer.innerHTML = "";
+
+          const youglishWidget = new YG.Widget(widgetContainer, {
+            // ... existing widget configuration ...
+          });
+
+          youglishWidget.fetch(word, "french");
+        }
+
+        function clearYouGlishCookies() {
+          // List of domains to clear cookies for
+          const domains = [
+            window.location.hostname, // local domain (127.0.0.1)
+            "youglish.com", // main domain
+            ".youglish.com", // subdomain wildcard
+          ];
+
+          // List of cookies to clear
+          const cookiesToClear = ["bakashot", "JSESSIONID", "SAPISID", "SID"];
+
+          domains.forEach((domain) => {
+            cookiesToClear.forEach((cookieName) => {
+              document.cookie = `${cookieName}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${domain}`;
+              console.log(`Cleared ${cookieName} cookie for ${domain}`);
+            });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
