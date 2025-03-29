@@ -47,11 +47,48 @@
       .table-container {
         flex: 1;
         padding: 1.5rem;
-        overflow-y: auto;
-        max-height: 100vh;
+        max-height: calc(100vh - 3rem);
         background-color: var(--card-bg);
         border-radius: 0.75rem;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: var(--card-bg);
+      }
+
+      tbody {
+        display: block;
+        overflow-y: auto;
+        max-height: calc(100vh - 10rem);
+      }
+
+      thead, tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+      }
+
+      .table-container {
+        flex: 1;
+        padding: 1.5rem;
+        max-height: calc(100vh - 3rem);
+        background-color: var(--card-bg);
+        border-radius: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
       }
 
       .widget-container {
