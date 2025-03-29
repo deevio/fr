@@ -733,22 +733,6 @@
           const widgetContainer = document.getElementById("youglish-widget");
           const wordLink = document.querySelector("#word-link a");
 
-          // Add click counter to localStorage
-          let clickCount = parseInt(
-            localStorage.getItem("youglishClicks") || 0
-          );
-          clickCount++;
-
-          // Check if we need to clear cookies (after 14 clicks to be safe)
-          if (clickCount >= 10) {
-            clearYouGlishCookies();
-            clickCount = 0;
-          }
-
-          localStorage.setItem("youglishClicks", clickCount);
-
-          // clearYouGlishCookies();
-
           // Rest of your existing widget code...
           const youglishUrl = `https://youglish.com/pronounce/${word}/french/fr`;
           wordLink.href = youglishUrl;
@@ -762,25 +746,6 @@
           });
 
           youglishWidget.fetch(word, "french");
-        }
-
-        function clearYouGlishCookies() {
-          // List of domains to clear cookies for
-          const domains = [
-            window.location.hostname, // local domain (127.0.0.1)
-            "youglish.com", // main domain
-            ".youglish.com", // subdomain wildcard
-          ];
-
-          // List of cookies to clear
-          const cookiesToClear = ["bakashot", "JSESSIONID", "SAPISID", "SID"];
-
-          domains.forEach((domain) => {
-            cookiesToClear.forEach((cookieName) => {
-              document.cookie = `${cookieName}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${domain}`;
-              console.log(`Cleared ${cookieName} cookie for ${domain}`);
-            });
-          });
         }
       });
     </script>
