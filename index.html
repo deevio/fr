@@ -281,7 +281,7 @@
     <div class="container">
       <!-- Table Container -->
       <div class="table-container">
-        <h2><i class="fas fa-list-ul"></i>French Words</h2>
+        <h2><i class="fas fa-list-ul"></i>French Words <span style="font-size: 0.875rem; color: var(--text-light); font-weight: normal;">(<span id="word-count">0</span> words)</span></h2>
         <table id="word-table">
           <thead>
             <tr>
@@ -466,6 +466,16 @@
 
         // Initial render
         renderTable();
+        
+        // Update word count
+        function updateWordCount() {
+          document.getElementById('word-count').textContent = words.length;
+        }
+        
+        // Call updateWordCount after initial render and whenever words change
+        updateWordCount();
+        addWordsBtn.addEventListener('click', updateWordCount);
+        clearWordsBtn.addEventListener('click', updateWordCount);
         
         // Load first word by default if exists
         if (words.length > 0) {
