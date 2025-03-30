@@ -72,13 +72,18 @@
         height: 100%;
       }
       .word-row:hover {
-        background-color: rgba(0, 35, 149, 0.05);
+        background-color: rgba(0, 35, 149, 0.05) !important;
+        transform: none !important; /* Prevent row shrinking */
       }
       .phonetic-guide {
         font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       }
       .french-word {
         cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .french-word:hover {
+        color: #001a7a;
       }
     </style>
   </head>
@@ -236,7 +241,7 @@
         </div>
       </div>
       <div class="p-4 flex-1 flex flex-col gap-4">
-        <div id="current-word-display" class="bg-frenchMint rounded-lg p-4 hidden">
+        <div id="current-word-display" class="bg-frenchMint rounded-lg p-4">
           <div class="flex items-baseline gap-4">
             <h3 id="spoken-word" class="text-2xl font-playfair font-medium">
               Bonjour
@@ -262,7 +267,7 @@
             id="youglish-iframe"
             class="yg-widget"
             allowfullscreen
-            src="about:blank"
+            src="https://youglish.com/pronounce/Bonjour/french?emb=1&e_id=init-widget&e_comp=255&speed=0"
           ></iframe>
         </div>
         
@@ -326,7 +331,7 @@
     <div class="bg-white rounded-xl p-6 w-full max-w-md">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-semibold font-playfair">Your Learning Stats</h3>
-        <button id="close-stats" class="text-gray-500 hover:text-gray-7 00">
+        <button id="close-stats" class="text-gray-500 hover:text-gray-700">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -430,6 +435,12 @@
           words = storedWords ? JSON.parse(storedWords) : getDefaultWords();
           renderTable();
           updateEmptyState();
+          
+          // Preload the first word pronunciation if available
+          if (words.length > 0) {
+            currentWordIndex = 0;
+            showWordPronunciation(words[0], 0);
+          }
         }
 
         function loadStats() {
@@ -532,7 +543,7 @@
 
           words.forEach((word, index) => {
             const row = document.createElement("tr");
-            row.className = `word-row transition-all ${currentWordIndex === index ? "bg-blue-50" : ""}`;
+            row.className = `word-row ${currentWordIndex === index ? "bg-blue-50" : ""}`;
             row.dataset.wordIndex = index;
 
             // Number cell
@@ -545,6 +556,7 @@
             const frenchCell = document.createElement("td");
             frenchCell.className = "p-3 text-sm font-medium text-frenchBlue french-word";
             frenchCell.textContent = word.french;
+            frenchCell.title = "Click to hear pronunciation";
             frenchCell.addEventListener("click", () => showWordPronunciation(word, index));
             row.appendChild(frenchCell);
 
@@ -642,11 +654,11 @@
             }
           });
 
-          // Load pronunciation widget
-          loadYouGlishWidget(word.french);
+          // Load pronunciation widget with stopped video
+          loadYouGlishWidget(word.french, true);
         }
 
-        function loadYouGlishWidget(word) {
+        function loadYouGlishWidget(word, stopVideo = true) {
           // Escape special characters and normalize
           const cleanWord = word.replace(/[^\w\s]/g, '').trim();
           if (!cleanWord) return;
@@ -664,6 +676,12 @@
           url.searchParams.append('emb', '1');
           url.searchParams.append('e_id', widgetId);
           url.searchParams.append('e_comp', '255');
+          
+          // Add parameter to stop video if requested
+          if (stopVideo) {
+            url.searchParams.append('speed', '0');
+          }
+          
           if (accent === 'qc') {
             url.searchParams.append('accent', 'qc');
           }
@@ -778,6 +796,11 @@
               updateEmptyState();
               toggleCSVInput(false);
               showNotification(`Added ${newWords.length} words`);
+              
+              // Auto-load first word if this was the first import
+              if (words.length === newWords.length) {
+                showWordPronunciation(words[0], 0);
+              }
             } catch (error) {
               showNotification("Invalid format. Use: French,English,Phonetic", "error");
             }
@@ -798,7 +821,8 @@
           // Slow speech button
           elements.slowSpeechBtn.addEventListener("click", () => {
             if (currentWordIndex >= 0) {
-              showNotification("Click the speed controls in the YouTube player (⏵ icon)");
+              loadYouGlishWidget(words[currentWordIndex].french, true);
+              showNotification("Video stopped. Click the speed controls in the YouTube player (⏵ icon) to adjust playback speed");
             }
           });
 
