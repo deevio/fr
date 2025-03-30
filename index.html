@@ -4,482 +4,886 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>French Words with Pronunciation</title>
-    <!-- Add Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- Add Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2' rx='0.2'><rect width='1' height='2' fill='%23005BAC'/><rect x='1' width='1' height='2' fill='%23fff'/><rect x='2' width='1' height='2' fill='%23EF4135'/></svg>">
+    <!-- Tailwind CSS with some custom colors -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              frenchBlue: "#002395",
+              frenchWhite: "#FFFFFF",
+              frenchRed: "#ED2939",
+              frenchMint: "#C9F0DD",
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Favicon with French flag colors -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2' rx='0.2'><rect width='1' height='2' fill='%23002395'/><rect x='1' width='1' height='2' fill='%23fff'/><rect x='2' width='1' height='2' fill='%23ED2939'/></svg>"
+    />
     <style>
-      :root {
-        --primary: #4f46e5;
-        --primary-dark: #4338ca;
-        --text: #1f2937;
-        --text-light: #6b7280;
-        --bg: #f9fafb;
-        --card-bg: #ffffff;
-        --border: #e5e7eb;
+      /* Custom styles */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
       }
-      
-      body {
-        font-family: 'Inter', Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: row;
-        min-height: 100vh;
-        background-color: var(--bg);
-        color: var(--text);
-        line-height: 1.5;
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
       }
-
-      #word-table td,
-      #word-link a {
-        text-decoration: none;
+      ::-webkit-scrollbar-thumb {
+        background: #c7d2fe;
+        border-radius: 100px;
       }
-
-      .container {
-        display: flex;
+      .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .yg-widget {
         width: 100%;
-        gap: 1.5rem;
-        padding: 1.5rem;
-        box-sizing: border-box;
-      }
-
-      .table-container {
-        flex: 1;
-        padding: 1.5rem;
-        max-height: calc(100vh - 3rem);
-        background-color: var(--card-bg);
-        border-radius: 0.75rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-      }
-
-      thead {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        background-color: var(--card-bg);
-      }
-
-      tbody {
-        display: block;
-        overflow-y: auto;
-        max-height: calc(100vh - 10rem);
-      }
-
-      thead, tbody tr {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-      }
-
-      .table-container {
-        flex: 1;
-        padding: 1.5rem;
-        max-height: calc(100vh - 3rem);
-        background-color: var(--card-bg);
-        border-radius: 0.75rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column;
-      }
-
-      .widget-container {
-        flex: 1;
-        padding: 1.5rem;
-        background-color: var(--card-bg);
-        border-left: 1px solid var(--border);
-        position: sticky;
-        top: 0;
-        border-radius: 0.75rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column;
-      }
-
-      h2 {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-top: 0;
-        margin-bottom: 1rem;
-        color: var(--text);
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      th,
-      td {
-        text-align: left;
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid var(--border);
-      }
-
-      th {
-        background-color: var(--bg);
-        font-weight: 500;
-        color: var(--text-light);
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-      }
-
-      tr:hover {
-        background-color: rgba(79, 70, 229, 0.03);
-      }
-
-      td.clickable-word {
-        color: var(--primary);
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.15s ease;
-      }
-
-      td.clickable-word:hover {
-        color: var(--primary-dark);
-      }
-
-      #word-link a {
-        color: var(--primary);
-        display: none;
-        font-size: 0.875rem;
-        padding: 0.5rem 0;
-        transition: color 0.15s ease;
-      }
-
-      #word-link a:hover {
-        color: var(--primary-dark);
-      }
-
-      #youglish-widget {
-        width: 100%;
-        min-height: 300px;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--bg);
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
-        overflow: hidden;
-      }
-
-      /* CSV Input Area Styles */
-      .csv-input-container {
-        margin-top: 1rem;
-        border-top: 1px solid var(--border);
-        padding-top: 1rem;
-      }
-
-      .csv-toggle {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--primary);
-        cursor: pointer;
-        font-size: 0.875rem;
-        margin-bottom: 0.5rem;
-      }
-
-      .csv-toggle:hover {
-        color: var(--primary-dark);
-      }
-
-      .csv-input-area {
-        display: none;
-        width: 100%;
-        margin-bottom: 0.5rem;
-      }
-
-      .csv-input-area textarea {
-        width: 100%;
-        min-height: 100px;
-        padding: 0.75rem;
-        border: 1px solid var(--border);
-        border-radius: 0.375rem;
-        font-family: monospace;
-        font-size: 0.875rem;
-        resize: vertical;
-      }
-
-      .csv-input-area.active {
-        display: block;
-      }
-
-      .csv-buttons {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-      }
-
-      button {
-        padding: 0.5rem 1rem;
-        border-radius: 0.375rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.15s ease;
-      }
-
-      .btn-primary {
-        background-color: var(--primary);
-        color: white;
+        height: 100%;
         border: none;
+        min-height: 300px;
       }
-
-      .btn-primary:hover {
-        background-color: var(--primary-dark);
+      .yg-widget-container {
+        width: 100%;
+        height: 100%;
       }
-
-      .btn-secondary {
-        background-color: var(--bg);
-        color: var(--text);
-        border: 1px solid var(--border);
+      .word-row:hover {
+        background-color: rgba(0, 35, 149, 0.05) !important;
+        transform: none !important; /* Prevent row shrinking */
       }
-
-      .btn-secondary:hover {
-        background-color: #f3f4f6;
+      .phonetic-guide {
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       }
-
-      @media (max-width: 768px) {
-        .container {
-          flex-direction: column;
-          padding: 1rem;
-        }
-
-        .table-container,
-        .widget-container {
-          max-height: none;
-          height: auto;
-        }
-
-        .widget-container {
-          border-left: none;
-          border-top: 1px solid var(--border);
-          position: static;
-        }
-
-        #youglish-widget {
-          min-height: 250px;
-          aspect-ratio: 16/9;
-        }
+      .french-word {
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .french-word:hover {
+        color: #001a7a;
       }
     </style>
   </head>
-  <body>
-    <div class="container">
-      <!-- Table Container -->
-      <div class="table-container">
-        <h2><i class="fas fa-list-ul"></i>French Words <span style="font-size: 0.875rem; color: var(--text-light); font-weight: normal;">(<span id="word-count">0</span> words)</span></h2>
-        <table id="word-table">
-          <thead>
-            <tr>
-              <th>Number</th>
-              <th>French</th>
-              <th>In English</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Rows will be dynamically generated -->
-          </tbody>
-        </table>
+  <body class="font-inter bg-gray-50 text-gray-800 min-h-screen">
+    <!-- Header -->
+    <header class="bg-frenchBlue text-white py-4 shadow-md">
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-language text-2xl"></i>
+          <h1 class="text-xl font-semibold font-playfair">French Pronunciation Guide</h1>
+        </div>
+        <button id="stats-btn" class="flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full hover:bg-opacity-30 transition-all">
+          <i class="fas fa-chart-pie"></i>
+          <span>Stats</span>
+        </button>
       </div>
+    </header>
 
-      <!-- Widget Container -->
-      <div class="widget-container">
-        <h2><i class="fas fa-volume-up"></i>Pronunciation</h2>
-        <!-- Add link container -->
-        <div id="word-link" class="mb-4">
-          <a href="" target="_blank"></a>
-        </div>
-        <div id="youglish-widget">
-          <p style="color: var(--text-light);">Select a word to hear pronunciation</p>
-        </div>
-
-        <!-- CSV Input Area -->
-        <div class="csv-input-container">
-          <div class="csv-toggle" id="csv-toggle">
-            <i class="fas fa-plus-circle"></i>
-            <span>Add new words (CSV format)</span>
+    <div
+      class="container mx-auto p-4 md:p-6 flex flex-col md:flex-row gap-6 min-h-[90vh]"
+    >
+      <!-- Words Table Section -->
+      <div
+        class="flex-1 bg-white rounded-xl shadow-sm flex flex-col border border-gray-200 overflow-hidden"
+      >
+        <div
+          class="p-4 border-b border-gray-200 flex justify-between items-center"
+        >
+          <h2
+            class="text-xl font-semibold font-playfair flex items-center gap-2"
+          >
+            <i class="fas fa-book text-frenchBlue"></i>
+            <span>French Vocabulary</span>
+            <span class="text-sm text-gray-500 font-normal"
+              >(<span id="word-count">0</span> words)</span
+            >
+          </h2>
+          <div class="flex gap-2">
+            <button
+              id="practice-words"
+              class="px-3 py-1 text-sm bg-frenchBlue text-white rounded-md hover:bg-opacity-90 transition-all flex items-center gap-1"
+            >
+              <i class="fas fa-microphone"></i>
+              <span>Practice</span>
+            </button>
+            <button
+              id="csv-toggle"
+              class="px-3 py-1 text-sm border border-frenchBlue text-frenchBlue rounded-md hover:bg-gray-50 transition-all flex items-center gap-1"
+            >
+              <i class="fas fa-plus-circle"></i>
+              <span>Add Words</span>
+            </button>
           </div>
-          <div class="csv-input-area" id="csv-input-area">
-            <textarea id="csv-input" placeholder="Enter words in CSV format (French,English)&#10;Example:&#10;lundi,monday&#10;mardi,tuesday&#10;mercredi,wednesday"></textarea>
-            <div class="csv-buttons">
-              <button class="btn-primary" id="add-words-btn">Add Words</button>
-              <button class="btn-secondary" id="clear-words-btn">Clear All</button>
-            </div>
+        </div>
+        <div class="overflow-auto flex-1 relative">
+          <table class="w-full">
+            <thead class="bg-gray-50 sticky top-0">
+              <tr class="text-left text-sm font-medium text-gray-500">
+                <th class="p-3 w-12">#</th>
+                <th class="p-3">French</th>
+                <th class="p-3">English</th>
+                <th class="p-3">Pronunciation</th>
+                <th class="p-3 w-20"></th>
+              </tr>
+            </thead>
+            <tbody id="word-table-body" class="divide-y divide-gray-200">
+              <!-- Words will be generated here -->
+            </tbody>
+          </table>
+          <div
+            id="empty-state"
+            class="h-full flex flex-col items-center justify-center p-8 text-center text-gray-400"
+          >
+            <i class="fas fa-language text-4xl mb-2"></i>
+            <p class="font-medium">No words yet</p>
+            <p class="text-sm mt-1">
+              Add some French vocabulary to get started!
+            </p>
+            <button
+            id="empty-add-btn"
+            class="mt-4 px-4 py-2 bg-frenchBlue text-white rounded-md hover:bg-opacity-90 flex items-center gap-1"
+          >
+            <i class="fas fa-plus"></i>
+            <span>Add Words</span>
+          </button>
+        </div>
+      </div>
+      <!-- CSV Input -->
+      <div
+        id="csv-input-area"
+        class="hidden p-4 border-t border-gray-200 bg-gray-50 fade-in"
+      >
+        <div class="mb-2 flex justify-between items-center">
+          <h3 class="font-medium text-sm text-gray-700 flex items-center gap-1">
+            <i class="fas fa-file-csv"></i>
+            <span>Add Words (CSV)</span>
+          </h3>
+          <div class="flex gap-1">
+            <button
+              id="import-example"
+              class="text-xs text-frenchBlue hover:underline flex items-center gap-1"
+            >
+              <i class="fas fa-lightbulb"></i>
+              <span>Use example</span>
+            </button>
           </div>
+        </div>
+        <textarea
+          id="csv-input"
+          rows="4"
+          class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-frenchBlue focus:border-frenchBlue text-sm"
+          placeholder="French,English (one pair per line)&#10;Example:&#10;Bonjour,Hello&#10;Merci,Thank you"
+        ></textarea>
+        <div class="flex gap-2 mt-3">
+          <button
+            id="add-words-btn"
+            class="flex-1 px-4 py-2 bg-frenchBlue text-white rounded-md hover:bg-opacity-90 transition-all flex items-center justify-center gap-1"
+          >
+            <i class="fas fa-check"></i>
+            <span>Import Words</span>
+          </button>
+          <button
+            id="cancel-import"
+            class="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded-md hover:bg-gray-50 transition-all"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
+    <!-- Pronunciation Widget Section -->
+    <div
+      class="md:w-[32rem] bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col"
+    >
+      <div
+        class="p-4 border-b border-gray-200 flex justify-between items-center"
+      >
+        <h2
+          class="text-xl font-semibold font-playfair flex items-center gap-2"
+        >
+          <i class="fas fa-volume-up text-frenchRed"></i> 
+          <span>Pronunciation Guide</span>
+        </h2>
+        <div id="pronunciation-options" class="flex items-center gap-2">
+          <select
+            id="pronunciation-accent"
+            class="text-xs border border-gray-300 rounded px-2 py-1 bg-white"
+          >
+            <option value="fr">Standard French</option>
+            <option value="qc">Québécois</option>
+          </select>
+          <button id="refresh-widget" class="text-gray-600 hover:text-frenchBlue">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 flex-1 flex flex-col gap-4">
+        <div id="current-word-display" class="bg-frenchMint rounded-lg p-4">
+          <div class="flex items-baseline gap-4">
+            <h3 id="spoken-word" class="text-2xl font-playfair font-medium">
+              Bonjour
+            </h3>
+            <span id="phonetic-spelling" class="text-sm text-gray-600 phonetic-guide">
+              /bɔ̃.ʒuʁ/
+            </span>
+            <button
+              id="slow-speech"
+              class="ml-auto text-sm text-frenchBlue hover:underline flex items-center gap-1"
+            >
+              <i class="fas fa-snail"></i> Slow
+            </button>
+          </div>
+          <p id="word-translation" class="text-gray-700 mt-1">
+            <span class="font-medium">English:</span> Hello
+          </p>
+        </div>
+        
+        <!-- Pronunciation Widget -->
+        <div class="flex-1 bg-gray-100 rounded-lg overflow-hidden">
+          <iframe
+            id="youglish-iframe"
+            class="yg-widget"
+            allowfullscreen
+            src="https://youglish.com/pronounce/Bonjour/french?emb=1&e_id=init-widget&e_comp=255&speed=0"
+          ></iframe>
+        </div>
+        
+        <!-- Pronunciation Tips -->
+        <div class="p-4 border border-gray-200 rounded-lg">
+          <h4
+            class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2"
+          >
+            <i class="fas fa-lightbulb text-yellow-500"></i>
+            Tips for pronunciation:
+          </h4>
+          <ul class="text-xs text-gray-600 space-y-1">
+            <li class="flex items-start">
+              <i
+                class="fas fa-circle-small mt-1 mr-1 text-frenchBlue text-[8px]"
+              ></i>
+              <span
+                >French vowels (a, e, i, o, u) are often more closed than
+                English</span
+              >
+            </li>
+            <li class="flex items-start">
+              <i
+                class="fas fa-circle-small mt-1 mr-1 text-frenchBlue text-[8px]"
+              ></i>
+              <span
+                >Nasal sounds (an, in, on, un) are key - air flows through
+                nose</span
+              >
+            </li>
+            <li class="flex items-start">
+              <i
+                class="fas fa-circle-small mt-1 mr-1 text-frenchBlue text-[8px]"
+              ></i>
+              <span
+                >Final consonants are usually silent (e.g., "Paris" is
+                pronounced "Paree")</span
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification Toast (positioned fixed) -->
+  <div
+    id="toast"
+    class="fixed bottom-4 right-4 p-4 bg-green-500 text-white rounded-md shadow-lg transform translate-y-10 opacity-0 transition-all duration-300 hidden"
+  >
+    <div class="flex items-center gap-2">
+      <span id="toast-message">Words added successfully!</span>
+      <button id="toast-close" class="ml-2">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
 
-    <!-- YouGlish initialization -->
-    <script src="https://youglish.com/public/emb/widget.js"></script>
+  <!-- Stats Modal -->
+  <div id="stats-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-xl p-6 w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold font-playfair">Your Learning Stats</h3>
+        <button id="close-stats" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="space-y-4">
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <i class="fas fa-language text-frenchBlue"></i>
+            Vocabulary Progress
+          </h4>
+          <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+            <div id="words-progress" class="h-full bg-frenchBlue rounded-full" style="width: 0%"></div>
+          </div>
+          <p class="text-sm text-gray-600 mt-1">
+            <span id="words-count">0</span> words learned
+          </p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <i class="fas fa-volume-up text-frenchRed"></i>
+            Pronunciation Practice
+          </h4>
+          <p class="text-sm text-gray-600">
+            You've practiced <span id="practice-count">0</span> words
+          </p>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+            <i class="fas fa-crown text-yellow-500"></i>
+            Top Words
+          </h4>
+          <ul id="top-words-list" class="text-sm text-gray-600 space-y-1">
+            <li class="flex justify-between">
+              <span>Loading...</span>
+              <span>0</span>
+            </li>
+          </ul>
+        </div>
+        <button 
+          id="reset-stats" 
+          class="w-full mt-4 py-2 text-sm border border-red-200 text-red-500 rounded-md hover:bg-red-50 transition-all"
+        >
+          Reset Statistics
+        </button>
+      </div>
+    </div>
+  </div>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // Initialize the YouGlish widget
-        let youglishWidget = null;
+        // State management
+        let words = [];
+        let currentWordIndex = -1;
+        let stats = {
+          totalPractice: 0,
+          wordPracticeCount: {},
+          lastPractice: null
+        };
 
-        // Load words from localStorage or use default words
-        let words = loadWordsFromStorage();
+        // DOM Elements
+        const elements = {
+          tableBody: document.querySelector("#word-table-body"),
+          csvToggle: document.getElementById("csv-toggle"),
+          emptyAddBtn: document.getElementById("empty-add-btn"),
+          csvInputArea: document.getElementById("csv-input-area"),
+          csvInput: document.getElementById("csv-input"),
+          addWordsBtn: document.getElementById("add-words-btn"),
+          cancelImport: document.getElementById("cancel-import"),
+          importExample: document.getElementById("import-example"),
+          emptyState: document.getElementById("empty-state"),
+          practiceBtn: document.getElementById("practice-words"),
+          currentWordDisplay: document.getElementById("current-word-display"),
+          spokenWord: document.getElementById("spoken-word"),
+          phoneticSpelling: document.getElementById("phonetic-spelling"),
+          slowSpeechBtn: document.getElementById("slow-speech"),
+          wordTranslation: document.getElementById("word-translation"),
+          toast: document.getElementById("toast"),
+          toastMessage: document.getElementById("toast-message"),
+          toastClose: document.getElementById("toast-close"),
+          pronunciationOptions: document.getElementById("pronunciation-options"),
+          pronunciationAccent: document.getElementById("pronunciation-accent"),
+          youglishIframe: document.getElementById("youglish-iframe"),
+          refreshWidget: document.getElementById("refresh-widget"),
+          statsBtn: document.getElementById("stats-btn"),
+          statsModal: document.getElementById("stats-modal"),
+          closeStats: document.getElementById("close-stats"),
+          wordsProgress: document.getElementById("words-progress"),
+          wordsCount: document.getElementById("words-count"),
+          practiceCount: document.getElementById("practice-count"),
+          topWordsList: document.getElementById("top-words-list"),
+          resetStats: document.getElementById("reset-stats")
+        };
 
-        // DOM elements
-        const tableBody = document.querySelector("#word-table tbody");
-        const csvToggle = document.getElementById("csv-toggle");
-        const csvInputArea = document.getElementById("csv-input-area");
-        const csvInput = document.getElementById("csv-input");
-        const addWordsBtn = document.getElementById("add-words-btn");
-        const clearWordsBtn = document.getElementById("clear-words-btn");
-        const widgetContainer = document.getElementById("youglish-widget");
+        // Initialize
+        loadWords();
+        loadStats();
+        setupEventListeners();
 
-        // Toggle CSV input area
-        csvToggle.addEventListener("click", () => {
-          csvInputArea.classList.toggle("active");
-          const icon = csvToggle.querySelector("i");
-          if (csvInputArea.classList.contains("active")) {
-            icon.classList.replace("fa-plus-circle", "fa-minus-circle");
-          } else {
-            icon.classList.replace("fa-minus-circle", "fa-plus-circle");
-          }
-        });
-
-        // Add words from CSV
-        addWordsBtn.addEventListener("click", () => {
-          const csvText = csvInput.value.trim();
-          if (csvText) {
-            const newWords = parseCSV(csvText);
-            if (newWords.length > 0) {
-              words = [...words, ...newWords];
-              saveWordsToStorage(words);
-              renderTable();
-              csvInput.value = "";
-              alert(`${newWords.length} words added successfully!`);
-            } else {
-              alert("No valid words found in the CSV input.");
-            }
-          }
-        });
-
-        // Clear all words
-        clearWordsBtn.addEventListener("click", () => {
-          if (confirm("Are you sure you want to clear all words?")) {
-            words = [];
-            saveWordsToStorage(words);
-            renderTable();
-          }
-        });
-
-        // Render the table with words
-        function renderTable() {
-          tableBody.innerHTML = "";
-          words.forEach((word, index) => {
-            const row = document.createElement("tr");
-
-            const numberCell = document.createElement("td");
-            numberCell.textContent = index + 1;
-            row.appendChild(numberCell);
-
-            const frenchCell = document.createElement("td");
-            frenchCell.classList.add("clickable-word");
-            frenchCell.textContent = word.french;
-            frenchCell.addEventListener("click", () =>
-              loadYouGlishWidget(word.french)
-            );
-            row.appendChild(frenchCell);
-
-            const englishCell = document.createElement("td");
-            englishCell.textContent = word.english;
-            row.appendChild(englishCell);
-
-            tableBody.appendChild(row);
-          });
-        }
-
-        // Load YouGlish widget for a word
-        function loadYouGlishWidget(word) {
-          const wordLink = document.querySelector("#word-link a");
-
-          const youglishUrl = `https://youglish.com/pronounce/${word}/french/fr`;
-          wordLink.href = youglishUrl;
-          wordLink.textContent = youglishUrl;
-          wordLink.style.display = "block";
-
-          // Clear previous widget
-          widgetContainer.innerHTML = "";
+        // Functions
+        function loadWords() {
+          const storedWords = localStorage.getItem("frenchWords");
+          words = storedWords ? JSON.parse(storedWords) : getDefaultWords();
+          renderTable();
+          updateEmptyState();
           
-          // Create a new container for the widget
-          const widgetDiv = document.createElement('div');
-          widgetDiv.id = 'yg-widget-' + Date.now();
-          widgetContainer.appendChild(widgetDiv);
-
-          // Initialize the widget
-          youglishWidget = new YG.Widget(widgetDiv, {});
-
-          youglishWidget.fetch(word, "french");
-        }
-
-        // Parse CSV text into word objects
-        function parseCSV(csvText) {
-          return csvText.split('\n')
-            .map(line => line.trim())
-            .filter(line => line.length > 0)
-            .map(line => {
-              const [french, english] = line.split(',').map(part => part.trim());
-              return { french, english };
-            })
-            .filter(word => word.french && word.english);
-        }
-
-        // Load words from localStorage
-        function loadWordsFromStorage() {
-          const storedWords = localStorage.getItem('frenchWords');
-          if (storedWords) {
-            return JSON.parse(storedWords);
+          // Preload the first word pronunciation if available
+          if (words.length > 0) {
+            currentWordIndex = 0;
+            showWordPronunciation(words[0], 0);
           }
-          // Default words if nothing in storage
+        }
+
+        function loadStats() {
+          const storedStats = localStorage.getItem("frenchWordStats");
+          if (storedStats) {
+            stats = JSON.parse(storedStats);
+          }
+          updateStatsDisplay();
+        }
+
+        function saveStats() {
+          localStorage.setItem("frenchWordStats", JSON.stringify(stats));
+          updateStatsDisplay();
+        }
+
+        function updateStatsDisplay() {
+          elements.wordsCount.textContent = words.length;
+          elements.wordsProgress.style.width = `${Math.min(words.length * 2, 100)}%`;
+          elements.practiceCount.textContent = stats.totalPractice || 0;
+          
+          // Update top words list
+          if (words.length > 0) {
+            elements.topWordsList.innerHTML = '';
+            
+            // Create array of words with practice counts
+            const wordStats = words.map(word => {
+              return {
+                word: word.french,
+                count: stats.wordPracticeCount[word.french] || 0
+              };
+            });
+            
+            // Sort by most practiced
+            wordStats.sort((a, b) => b.count - a.count);
+            
+            // Display top 5
+            const topWords = wordStats.slice(0, 5);
+            topWords.forEach((item, index) => {
+              const li = document.createElement('li');
+              li.className = 'flex justify-between';
+              
+              const wordSpan = document.createElement('span');
+              wordSpan.textContent = `${index + 1}. ${item.word}`;
+              
+              const countSpan = document.createElement('span');
+              countSpan.textContent = item.count;
+              
+              li.appendChild(wordSpan);
+              li.appendChild(countSpan);
+              elements.topWordsList.appendChild(li);
+            });
+          }
+        }
+
+        function getDefaultWords() {
           return [
-            { french: "comme", english: "as" },
-            { french: "je", english: "I" },
-            { french: "son", english: "his" },
-            { french: "que", english: "that" },
-            { french: "il", english: "he" },
-            { french: "était", english: "was" },
-            { french: "pour", english: "for" },
+            { french: "Bonjour", english: "Hello", phonetic: "/bɔ̃.ʒuʁ/" },
+            { french: "Merci", english: "Thank you", phonetic: "/mɛʁ.si/" },
+            {
+              french: "Au revoir",
+              english: "Goodbye",
+              phonetic: "/o ʁə.vwaʁ/",
+            },
+            {
+              french: "S'il vous plaît",
+              english: "Please",
+              phonetic: "/s‿il vu plɛ/",
+            },
+            {
+              french: "Excusez-moi",
+              english: "Excuse me",
+              phonetic: "/ɛk.sky.ze.mwa/",
+            },
+            {
+              french: "Je m'appelle",
+              english: "My name is",
+              phonetic: "/ʒə ma.pɛl/",
+            },
+            {
+              french: "Comment ça va?",
+              english: "How are you?",
+              phonetic: "/kɔ.mɑ̃ sa va/",
+            },
+            {
+              french: "Bienvenue",
+              english: "Welcome",
+              phonetic: "/bjɛ̃.və.ny/",
+            },
           ];
         }
 
-        // Save words to localStorage
-        function saveWordsToStorage(words) {
-          localStorage.setItem('frenchWords', JSON.stringify(words));
+        function saveWords() {
+          localStorage.setItem("frenchWords", JSON.stringify(words));
+          updateStatsDisplay();
         }
 
-        // Initial render
-        renderTable();
-        
-        // Update word count
-        function updateWordCount() {
-          document.getElementById('word-count').textContent = words.length;
+        function renderTable() {
+          elements.tableBody.innerHTML = "";
+          document.getElementById("word-count").textContent = words.length;
+
+          words.forEach((word, index) => {
+            const row = document.createElement("tr");
+            row.className = `word-row ${currentWordIndex === index ? "bg-blue-50" : ""}`;
+            row.dataset.wordIndex = index;
+
+            // Number cell
+            const numCell = document.createElement("td");
+            numCell.className = "p-3 text-sm text-gray-500";
+            numCell.textContent = index + 1;
+            row.appendChild(numCell);
+
+            // French cell
+            const frenchCell = document.createElement("td");
+            frenchCell.className = "p-3 text-sm font-medium text-frenchBlue french-word";
+            frenchCell.textContent = word.french;
+            frenchCell.title = "Click to hear pronunciation";
+            frenchCell.addEventListener("click", () => showWordPronunciation(word, index));
+            row.appendChild(frenchCell);
+
+            // English cell
+            const englishCell = document.createElement("td");
+            englishCell.className = "p-3 text-sm";
+            englishCell.textContent = word.english;
+            row.appendChild(englishCell);
+            
+            // Phonetic cell
+            const phoneticCell = document.createElement("td");
+            phoneticCell.className = "p-3 text-sm text-gray-500 phonetic-guide";
+            phoneticCell.textContent = word.phonetic || "/.../";
+            row.appendChild(phoneticCell);
+
+            // Action cell
+            const actionCell = document.createElement("td");
+            actionCell.className = "p-2 text-center";
+            
+            const btnGroup = document.createElement("div");
+            btnGroup.className = "flex justify-center items-center gap-2";
+            
+            // Practice button
+            const practiceBtn = document.createElement("button");
+            practiceBtn.className = "text-gray-400 hover:text-frenchBlue transition-colors";
+            practiceBtn.innerHTML = '<i class="fas fa-microphone-alt"></i>';
+            practiceBtn.title = "Practice this word";
+            practiceBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              showWordPronunciation(word, index);
+            });
+            
+            // Delete button
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "text-gray-400 hover:text-frenchRed transition-colors";
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteBtn.title = "Delete word";
+            deleteBtn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              deleteWord(index);
+            });
+            
+            btnGroup.appendChild(practiceBtn);
+            btnGroup.appendChild(deleteBtn);
+            actionCell.appendChild(btnGroup);
+            row.appendChild(actionCell);
+
+            elements.tableBody.appendChild(row);
+          });
         }
-        
-        // Call updateWordCount after initial render and whenever words change
-        updateWordCount();
-        addWordsBtn.addEventListener('click', updateWordCount);
-        clearWordsBtn.addEventListener('click', updateWordCount);
-        
-        // Load first word by default if exists
-        if (words.length > 0) {
-          loadYouGlishWidget(words[0].french);
+
+        function deleteWord(index) {
+          if (confirm(`Delete "${words[index].french}"?`)) {
+            const deletedWord = words[index].french;
+            words.splice(index, 1);
+            saveWords();
+            renderTable();
+            updateEmptyState();
+
+            // Reset pronunciation if deleted the current word
+            if (currentWordIndex === index) {
+              resetPronunciationDisplay();
+            } else if (currentWordIndex > index) {
+              currentWordIndex--;
+            }
+
+            showNotification(`"${deletedWord}" deleted`, "success");
+          }
+        }
+
+        function showWordPronunciation(word, index) {
+          currentWordIndex = index;
+          
+          // Update practice stats
+          stats.totalPractice = (stats.totalPractice || 0) + 1;
+          stats.wordPracticeCount[word.french] = (stats.wordPracticeCount[word.french] || 0) + 1;
+          stats.lastPractice = new Date().toISOString();
+          saveStats();
+
+          // Update the current word display
+          elements.currentWordDisplay.classList.remove("hidden");
+          elements.spokenWord.textContent = word.french;
+          elements.wordTranslation.innerHTML = `
+            <span class="font-medium">English:</span> ${word.english}
+          `;
+          elements.phoneticSpelling.textContent = word.phonetic || "/.../";
+
+          // Highlight the selected row
+          const rows = elements.tableBody.querySelectorAll("tr");
+          rows.forEach((row, i) => {
+            if (i === index) {
+              row.classList.add("bg-blue-50");
+            } else {
+              row.classList.remove("bg-blue-50");
+            }
+          });
+
+          // Load pronunciation widget with stopped video
+          loadYouGlishWidget(word.french, true);
+        }
+
+        function loadYouGlishWidget(word, stopVideo = true) {
+          // Escape special characters and normalize
+          const cleanWord = word.replace(/[^\w\s]/g, '').trim();
+          if (!cleanWord) return;
+
+          // Generate a unique widget ID
+          const widgetId = "yg-widget-" + Date.now();
+          
+          // Get selected accent (fr = French, qc = Quebec)
+          const accent = elements.pronunciationAccent.value;
+          
+          // Construct the URL with proper parameters
+          const url = new URL(`https://youglish.com/pronounce/${encodeURIComponent(cleanWord)}/french`);
+          
+          // Add query parameters
+          url.searchParams.append('emb', '1');
+          url.searchParams.append('e_id', widgetId);
+          url.searchParams.append('e_comp', '255');
+          
+          // Add parameter to stop video if requested
+          if (stopVideo) {
+            url.searchParams.append('speed', '0');
+          }
+          
+          if (accent === 'qc') {
+            url.searchParams.append('accent', 'qc');
+          }
+          
+          // Update the iframe source
+          elements.youglishIframe.src = url.toString();
+        }
+
+        function resetPronunciationDisplay() {
+          // Clear the iframe
+          elements.youglishIframe.src = "about:blank";
+          currentWordIndex = -1;
+          
+          // Hide the current word display
+          elements.currentWordDisplay.classList.add("hidden");
+          
+          // Remove highlight from all rows
+          const rows = elements.tableBody.querySelectorAll("tr");
+          rows.forEach((row) => {
+            row.classList.remove("bg-blue-50");
+          });
+        }
+
+        function updateEmptyState() {
+          if (words.length === 0) {
+            elements.emptyState.classList.remove("hidden");
+          } else {
+            elements.emptyState.classList.add("hidden");
+          }
+        }
+
+        function parseCSV(input) {
+          return input
+            .trim()
+            .split("\n")
+            .filter((line) => line.trim() !== "")
+            .map((line) => {
+              // Handles both comma and semicolon separated values
+              const separator = line.includes(",") ? "," : ";";
+              const parts = line.split(separator).map(item => item.trim());
+              return {
+                french: parts[0] || "",
+                english: parts[1] || "",
+                phonetic: parts[2] || ""
+              };
+            });
+        }
+
+        function toggleCSVInput(show) {
+          elements.csvInputArea.classList.toggle("hidden", !show);
+          if (show) {
+            elements.csvInput.focus();
+          } else {
+            elements.csvInput.value = "";
+          }
+        }
+
+        function showNotification(message, type = "success") {
+          elements.toastMessage.textContent = message;
+          elements.toast.className = `fixed bottom-4 right-4 p-4 ${
+            type === "success" ? "bg-green-500" : "bg-red-500"
+          } text-white rounded-md shadow-lg transform translate-y-10 opacity-0 transition-all duration-300 flex items-center`;
+
+          setTimeout(() => {
+            elements.toast.classList.remove("hidden");
+            elements.toast.style.transform = "translateY(0)";
+            elements.toast.style.opacity = "1";
+          }, 10);
+
+          setTimeout(() => {
+            elements.toast.style.transform = "translateY(10px)";
+            elements.toast.style.opacity = "0";
+            setTimeout(() => elements.toast.classList.add("hidden"), 300);
+          }, 3000);
+        }
+
+        function showStatsModal() {
+          updateStatsDisplay();
+          elements.statsModal.classList.remove("hidden");
+        }
+
+        function hideStatsModal() {
+          elements.statsModal.classList.add("hidden");
+        }
+
+        function setupEventListeners() {
+          // Toggle CSV input area
+          elements.csvToggle.addEventListener("click", () => toggleCSVInput(true));
+          elements.emptyAddBtn.addEventListener("click", () => toggleCSVInput(true));
+
+          // Import example words
+          elements.importExample.addEventListener("click", () => {
+            elements.csvInput.value = `Maison,House,/mɛ.zɔ̃/\nVoiture,Car,/vwa.tyʁ/\nChien,Dog,/ʃjɛ̃/\nChat,Cat,/ʃa/\nAimer,To love,/ɛ.me/\nManger,To eat,/mɑ̃.ʒe/\nBoire,To drink,/bwaʁ/\nDormir,To sleep,/dɔʁ.miʁ/`;
+          });
+
+          // Cancel import
+          elements.cancelImport.addEventListener("click", () => toggleCSVInput(false));
+
+          // Add words from CSV
+          elements.addWordsBtn.addEventListener("click", () => {
+            const input = elements.csvInput.value;
+            if (!input.trim()) {
+              showNotification("Please enter some words", "error");
+              return;
+            }
+
+            try {
+              const newWords = parseCSV(input);
+              words.push(...newWords);
+              saveWords();
+              renderTable();
+              updateEmptyState();
+              toggleCSVInput(false);
+              showNotification(`Added ${newWords.length} words`);
+              
+              // Auto-load first word if this was the first import
+              if (words.length === newWords.length) {
+                showWordPronunciation(words[0], 0);
+              }
+            } catch (error) {
+              showNotification("Invalid format. Use: French,English,Phonetic", "error");
+            }
+          });
+
+          // Practice words button
+          elements.practiceBtn.addEventListener("click", () => {
+            if (words.length === 0) {
+              showNotification("No words to practice. Add some first!", "error");
+              return;
+            }
+
+            // Randomly select a word to practice
+            const randomIndex = Math.floor(Math.random() * words.length);
+            showWordPronunciation(words[randomIndex], randomIndex);
+          });
+
+          // Slow speech button
+          elements.slowSpeechBtn.addEventListener("click", () => {
+            if (currentWordIndex >= 0) {
+              loadYouGlishWidget(words[currentWordIndex].french, true);
+              showNotification("Video stopped. Click the speed controls in the YouTube player (⏵ icon) to adjust playback speed");
+            }
+          });
+
+          // Change pronunciation accent
+          elements.pronunciationAccent.addEventListener("change", () => {
+            if (currentWordIndex >= 0) {
+              loadYouGlishWidget(words[currentWordIndex].french);
+            }
+          });
+
+          // Refresh widget button
+          elements.refreshWidget.addEventListener("click", () => {
+            if (currentWordIndex >= 0) {
+              loadYouGlishWidget(words[currentWordIndex].french);
+            }
+          });
+
+          // Close toast notification
+          elements.toastClose.addEventListener("click", () => {
+            elements.toast.style.transform = "translateY(10px)";
+            elements.toast.style.opacity = "0";
+            setTimeout(() => elements.toast.classList.add("hidden"), 300);
+          });
+
+          // Stats modal buttons
+          elements.statsBtn.addEventListener("click", showStatsModal);
+          elements.closeStats.addEventListener("click", hideStatsModal);
+          elements.statsModal.addEventListener("click", (e) => {
+            if (e.target === elements.statsModal) {
+              hideStatsModal();
+            }
+          });
+          
+          // Reset stats button
+          elements.resetStats.addEventListener("click", () => {
+            if (confirm("Reset all learning statistics?")) {
+              stats = {
+                totalPractice: 0,
+                wordPracticeCount: {},
+                lastPractice: null
+              };
+              saveStats();
+              hideStatsModal();
+              showNotification("Statistics reset", "success");
+            }
+          });
+
+          // Allow submitting CSV with Enter key (but not Shift+Enter)
+          elements.csvInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              elements.addWordsBtn.click();
+            }
+          });
+          
+          // Close modal with Esc key
+          document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !elements.statsModal.classList.contains("hidden")) {
+              hideStatsModal();
+            }
+          });
         }
       });
     </script>
